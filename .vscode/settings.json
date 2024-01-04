@@ -22,10 +22,6 @@
     "emmet.includeLanguages": {
         "django-html": "html"
     },
-    "python.linting.pylintArgs": [
-        "--load-plugins=pylint_django",
-        "--errors-only",
-    ],
     "editor.rulers": [
         79,
     ],
@@ -41,4 +37,9 @@
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.cursorStyle": "line",
+    "pylint.args": [
+        // "--load-plugins=pylint_django",
+        "--errors-only",
+        "--disable=E1101",
+    ],
 }
