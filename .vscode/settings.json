@@ -12,7 +12,7 @@
     "editor.fontLigatures": true,
     "terminal.integrated.fontSize": 16,
     "terminal.integrated.fontFamily": "Fira Code",
-    // "editor.formatOnSave": true,
+    "editor.formatOnSave": true,
     "files.associations": {
         "*.html": "html",
         "**/templates/*.html": "django-html",
