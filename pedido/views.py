@@ -6,7 +6,7 @@ class Pagar(View):
     ...
 
 
-class FecharPedido(View):
+class SalvarPedido(View):
     ...
 
 
