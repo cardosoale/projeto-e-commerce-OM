@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views import View
@@ -42,6 +43,9 @@ class BasePerfil(View):
         self.userform = self.contexto['userform']
         self.perfilform = self.contexto['perfilform']
 
+        if self.request.user.is_authenticated:
+            self.template_name = 'perfil/atualizar.html'
+
         self.renderizar = render(
             self.request, self.template_name, self.contexto)
 
@@ -71,6 +75,16 @@ class Criar(BasePerfil):
             if password:
                 usuario.set_password(password)
 
+            if not self.perfil:
+                self.perfilform.cleaned_data['usuario'] = usuario
+                perfil = models.Perfil(**self.perfilform.cleaned_data)
+                perfil.save()
+
+            else:
+                perfil = self.perfilform.save(commit=False)
+                perfil.usuario = usuario
+                perfil.save()
+
             usuario.email = email
             usuario.first_name = first_name
             usuario.last_name = last_name
@@ -85,6 +99,19 @@ class Criar(BasePerfil):
             perfil = self.perfilform.save(commit=False)
             perfil.usuario = usuario
             perfil.save()
+
+        if password:
+            autentica = authenticate(
+                self.request,
+                username=usuario,
+                password=password
+            )
+
+            if autentica:
+                login(
+                    self.request,
+                    user=usuario
+                )
 
         self.request.session['carrinho'] = self.carrinho
         self.request.session.save()
