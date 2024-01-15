@@ -1,4 +1,5 @@
-from pprint import pprint
+import perfil
+from perfil.models import Perfil
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -158,6 +159,21 @@ class ResumoDaCompra(View):
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             return redirect('perfil:criar')
+
+        perfil = Perfil.objects.filter(usuario=self.request.user).exists
+        if not perfil:
+            messages.error(
+                self.request,
+                'Usuário sem perfil'
+            )
+            return redirect('perfil:criar')
+
+        if not self.request.session.get('carrinho'):
+            messages.error(
+                self.request,
+                'Carrinho Vazio'
+            )
+            return redirect('produto:lista')
 
         contexto = {
             'usuario': self.request.user,
