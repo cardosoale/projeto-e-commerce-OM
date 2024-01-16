@@ -1,7 +1,9 @@
-from django.http import HttpResponse
+from typing import Any
+from django.db.models.query import QuerySet
+from django.http import HttpRequest, HttpResponse, HttpResponse as HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views import View
+from django.views.generic import View, DetailView
 from django.contrib import messages
 
 from produto.models import Variacao
@@ -9,23 +11,43 @@ from utils import utils
 from .models import Pedido, ItemPedido
 
 
-class Pagar(View):
+class DispatchLoginRequired(View):
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if not self.request.user.is_authenticated:
+            return redirect('perfil:criar')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class Pagar(DispatchLoginRequired, DetailView):
+    template_name = 'pedido/pagar.html'
+    model = Pedido
+    pk_url_kwarg = 'pk'
+    context_object_name = 'pedido'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        qs = super().get_queryset()
+        qs = qs.filter(user=self.request.user)
+        return qs
+
+
+class SalvarPedido(View):
     template_name = 'pedido/pagar.html'
 
     def get(self, *args, **kwargs):
         if not self.request.user.is_authenticated:
             messages.error(
                 self.request,
-                'Login necessário'
+                'Você precisa fazer login.'
             )
             return redirect('perfil:criar')
 
         if not self.request.session.get('carrinho'):
             messages.error(
                 self.request,
-                'Inclua produtos no carrinho.'
+                'Seu carrinho está vazio.'
             )
             return redirect('produto:lista')
+
         carrinho = self.request.session.get('carrinho')
         carrinho_variacao_ids = [v for v in carrinho]
         bd_variacoes = list(
@@ -35,6 +57,7 @@ class Pagar(View):
 
         for variacao in bd_variacoes:
             vid = str(variacao.id)
+
             estoque = variacao.estoque
             qtd_carrinho = carrinho[vid]['quantidade']
             preco_unt = carrinho[vid]['preco_unitario']
@@ -69,7 +92,7 @@ class Pagar(View):
             usuario=self.request.user,
             total=valor_total_carrinho,
             qtd_total=qtd_total_carrinho,
-            status='C'
+            status='C',
         )
 
         pedido.save()
@@ -93,13 +116,13 @@ class Pagar(View):
         del self.request.session['carrinho']
 
         return redirect(
-            'pedido:lista'
+            reverse(
+                'pedido:pagar',
+                kwargs={
+                    'pk': pedido.pk
+                }
+            )
         )
-
-
-class SalvarPedido(View):
-    def get(self, *args, **kwargs):
-        return HttpResponse('Salvar Pedido')
 
 
 class Detalhe(View):

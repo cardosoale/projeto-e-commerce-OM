@@ -1,5 +1,7 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load omfilters %}
+
+{% block titulo %}Resumo da compra | {% endblock %}
 
 {% block conteudo %}
 
@@ -8,7 +10,7 @@
         <h2>Resumo da sua compra</h2>
 
         <p class="lead">Dados do usuário</p>
-        <p>Caso precise editar, <a href="{% url "perfil:criar" %}">clique aqui</a></p>
+        <p>Caso precise editar, <a href="{% url 'perfil:criar' %}">clique aqui</a></p>
         <dl class="row">
             <dt class="col-lg-2">Nome:</dt>
             <dd class="col-lg-4">{{ usuario.first_name }}</dd>
@@ -27,7 +29,7 @@
         </dl>
 
         <p class="lead">Dados de endereço</p>
-        <p>Caso precise editar, <a href="{% url "perfil:criar" %}">clique aqui</a></p>
+        <p>Caso precise editar, <a href="{% url 'perfil:criar' %}">clique aqui</a></p>
         <dl class="row">
             <dt class="col-lg-2">Endereço:</dt>
             <dd class="col-lg-4">{{ usuario.perfil.endereco }}</dd>
@@ -35,8 +37,8 @@
             <dd class="col-lg-4">{{ usuario.perfil.numero }}</dd>
 
             <dt class="col-lg-2">Complemento:</dt>
-            <dd class="col-lg-4">Casa</dd>
-            <dt class="col-lg-2">Bairro:</dt>
+            <dd class="col-lg-4">{{ usuario.perfil.complemento }}</dd>
+            <dt class="col-lg-2">Nascimento:</dt>
             <dd class="col-lg-4">{{ usuario.perfil.bairro }}</dd>
 
             <dt class="col-lg-2">Cidade:</dt>
@@ -54,26 +56,27 @@
 
 <div class="row mt-3">
     <div class="col">
-        <h3>Resumo do Carrinho</h3>
+        <h3>Resumo do carrinho</h3>
         <p class="lead">Os produtos, quantidades e preços que você escolheu.</p>
 
         {% include 'parciais/_carrinho.html' %}
     </div>
+
 </div>
-
 <div class="row mt-3">
-
     <div class="col">
-        <p class="lead text-center"><span class=font-weight-bold>Total do Carrinho:</span> {{ carrinho|cart_totals|formata_preco }}</p>
+        <p class="lead text-center"><span class="font-weight-bold">Total do carrinho:</span>
+            {{ carrinho|cart_totals|formata_preco }}</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col">
-        <a class="btn btn-block btn-primary btn-lg" href="{% url "pedido:pagar" %}">
+        <a class="btn btn-block btn-primary btn-lg" href="{% url 'pedido:salvarpedido' %}">
             Realizar pedido e pagar
         </a>
     </div>
 </div>
 
-{% endblock conteudo %}
+
+{% endblock %}
