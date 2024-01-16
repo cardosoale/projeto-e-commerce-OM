@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Pedido(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.FloatField()
+    qtd_total = models.PositiveBigIntegerField()
     status = models.CharField(
         default='C',
         max_length=1,
@@ -21,17 +22,6 @@ class Pedido(models.Model):
     def __str__(self):
         return f'Pedido Nº {self.pk}'
 
-
-#         ItemPedido:
-#             pedido - FK pedido
-#             produto - Char
-#             produto_id - Int
-#             variacao - Char
-#             variacao_id - Int
-#             preco - Float
-#             preco_promocional - Float
-#             quantidade - Int
-#             imagem - Char
 
 class ItemPedido(models.Model):
     class Meta:
