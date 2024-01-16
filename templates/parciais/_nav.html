@@ -1,7 +1,7 @@
 {% load omfilters %}
 
 <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-  <a class="navbar-brand" href="{% url "produto:lista" %}">E-commerce</a>
+  <a class="navbar-brand" href="{% url 'produto:lista' %}">E-commerce</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -25,13 +25,14 @@
           Conta
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{% url "perfil:criar" %}">Atualizar Dados</a>
-          <a class="dropdown-item" href="{% url "perfil:logout" %}">Sair</a>
+          <a class="dropdown-item" href="{% url 'pedido:lista' %}">Meus Pedidos</a>
+          <a class="dropdown-item" href="{% url 'perfil:criar' %}">Atualizar Meus Dados</a>
+          <a class="dropdown-item" href="{% url 'perfil:logout' %}">Sair</a>
         </div>
       </li>
       {% else %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url "perfil:criar" %}">Entrar</a>
+        <a class="nav-link" href="{% url " perfil:criar" %}">Entrar</a>
       </li>
       {% endif %}
 
@@ -39,7 +40,7 @@
 
       {% if request.session.carrinho %}
       <li class="nav-item">
-        <a class="nav-link nav-cart-link active" href="{% url "produto:carrinho" %}">
+        <a class="nav-link nav-cart-link active" href="{% url " produto:carrinho" %}">
           <span class="nav-cart-text mr-1"> Carrinho </span>
           <span class="nav-cart-count mr-1">
             <strong>{{request.session.carrinho|cart_total_qtd}} x </strong>
