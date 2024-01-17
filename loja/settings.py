@@ -46,16 +46,11 @@ INSTALLED_APPS = [
     'pedido',
     'perfil',
     'produto',
-
-    # Remover
-    'debug_toolbar',
-
 ]
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -169,10 +164,5 @@ SESSION_SAVE_EVERY_REQUEST = False
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
